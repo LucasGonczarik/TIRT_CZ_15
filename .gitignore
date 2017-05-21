@@ -38,12 +38,6 @@
 ### Git ###
 *.orig
 
-### Omnet++ ##
-.cproject
-.oppbuildspec
-.project
-MakeFile
-
 ### Others ###
 .settings/
 /out/

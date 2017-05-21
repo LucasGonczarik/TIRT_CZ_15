@@ -35,7 +35,7 @@ void Sink::finish() {
 void Sink::handleMessage(cMessage* msg) {
     double currentTime = simTime().dbl();
     Message* message = check_and_cast<Message*>(msg);
-    double delay = currentTime-message->getCreationTime();
+    double delay = currentTime - message->getCreationTime();
     int priority = message->getPriority();
     cLongHistogram* stat = getHistogram(priority);
 
