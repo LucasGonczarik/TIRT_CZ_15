@@ -16,8 +16,7 @@ using namespace omnetpp;
 
 typedef std::map<int, cLongHistogram*> PriorityStatsMap;
 
-class Sink : public cSimpleModule
-{
+class Sink : public cSimpleModule {
     private:
         int packet_count;
         simsignal_t eventSignal;

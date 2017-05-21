@@ -15,8 +15,7 @@
 
 package submodule;
 
-simple BasicGenerator
-{
+simple BasicGenerator {
     parameters:
     	@signal[event](type="double");
     	@statistic[delay](title="event delay"; source="event"; record=vector,stats; interpolationmode=none);

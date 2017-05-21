@@ -19,13 +19,11 @@ PoissonGenerator::~PoissonGenerator() {
 // register module class with OMNeT++
 Define_Module(PoissonGenerator);
 
-void PoissonGenerator::initialize()
-{
+void PoissonGenerator::initialize() {
     lambda = par("lambda");
     BasicGenerator::initialize();
 }
 
-double PoissonGenerator::getDelay()
-{
+double PoissonGenerator::getDelay() {
     return poisson(lambda);
 }

@@ -19,24 +19,20 @@ BasicGenerator::~BasicGenerator() {
     cancelAndDelete(event);
 }
 
-void BasicGenerator::initialize()
-{
+void BasicGenerator::initialize() {
     eventSignal = registerSignal("event");
     // Start sending messages after 1s
     scheduleAt(1.0, event);
 }
 
-void BasicGenerator::handleMessage(cMessage* msg)
-{
-    if (msg == event)
-    {
+void BasicGenerator::handleMessage(cMessage* msg) {
+    if (msg == event) {
         // Calculate delay
         double delay = getDelay();
 
         emit(eventSignal, delay);
 
-        if (canSendMessage())
-        {
+        if (canSendMessage()) {
             // It's time to send message, so prepare new one and send
             send(generateMessage(), "out");
         }
@@ -44,25 +40,23 @@ void BasicGenerator::handleMessage(cMessage* msg)
         // Send next message after delay
         scheduleAt(simTime() + delay, event);
     }
-    else
-    {
+    else {
         // This should never happen, but for sure delete
         delete msg;
     }
 }
 
-Message* BasicGenerator::generateMessage()
-{
+Message* BasicGenerator::generateMessage() {
     char name[20];
     int src = getId();
     int dest = 31337;
-    int priority = intrand(5) + 1;
+    int priority = intrand(3) + 1; // low, normal, high
     messageId += 1;
 
     // Generate simple message name
     sprintf(name, "msg-%d", messageId);
 
-    //Create new packet
+    //Create new message
     Message* message = new Message(name);
 
     // Set properties
@@ -78,8 +72,7 @@ Message* BasicGenerator::generateMessage()
     return message;
 }
 
-bool BasicGenerator::canSendMessage()
-{
+bool BasicGenerator::canSendMessage() {
     // Return false to cancel send
     return true;
 }

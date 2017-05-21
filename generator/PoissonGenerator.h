@@ -15,7 +15,7 @@ using namespace omnetpp;
 
 class PoissonGenerator : public BasicGenerator {
     private:
-        double lambda;
+        double lambda; // default value of parameter can be set in *.ned file
 
     protected:
         virtual void initialize();

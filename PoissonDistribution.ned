@@ -19,8 +19,7 @@ import submodule.Sink;
 // 
 // TODO documentation
 //
-network PoissonNetwork
-{
+network PoissonNetwork {
     submodules:
         sink: Sink {
             @display("p=370,84");

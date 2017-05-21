@@ -3,7 +3,7 @@ message Message {
     int dst;
     int sessionID;
     int messageID;
-    int priority;
-    int hopCount = 0;
+    int priority; // low, normal, high
+    int hopCount = 0; // do we need this?
     double creationTime;
 }

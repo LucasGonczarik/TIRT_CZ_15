@@ -15,8 +15,7 @@
 
 package submodule;
 
-simple Sink
-{
+simple Sink {
     parameters:
         @class(Sink);
     	@signal[event](type="double");
