@@ -39,7 +39,6 @@
 *.orig
 
 ### Others ###
-.settings/
 /out/
 /results/
 
