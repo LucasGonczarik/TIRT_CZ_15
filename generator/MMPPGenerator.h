@@ -32,9 +32,9 @@ private:
     vector<double> lambdas;
     vector<vector<double>> matrix;
 
-    int getStayPropability();
-    int getGoToNextPropability();
-    int getGoToPreviousPropability();
+    double getStayPropability();
+    double getGoToNextPropability();
+    double getGoToPreviousPropability();
     int chooseNextState();
     void generateLambdas();
     void normalize(double&, double&, double&);
