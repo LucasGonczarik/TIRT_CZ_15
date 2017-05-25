@@ -25,31 +25,32 @@
 grupy Types, kolejno do sieci wrzucamy nasze moduły z grupy `Submodules` (e.g. `PoissonGenerator`) "do" sieci.
 
 ## Struktura projektu 
-**.**
-**├── generator**                     - generatory Poisson/OnOff/MMP ect.
-**│   ├── BasicGenerator.cpp**          - klasa bazowa (*parent*) dla generatorów
-**│   ├── BasicGenerator.h**
-**│   ├── PoissonGenerator.cpp**        - generator `Poissona: BasicGenerator`
-**│   ├── PoissonGenerator.h**
-**│   └── ...** 
-**├── Makefile**
-**├── message**                          
-**│   └── Message.msg**                 - przesyłana wiadomość, `Omnet++` generuje `Message_m.*` z tego 
-**├── object**                          
-**│   ├── Sink.cpp**
-**│   ├── Sink.h**                      
-**│   └── ...**
-**├── omnetpp.ini**                     - konfiguracja naszych symulacji (`*.ned`), np. ograniczenie czasowe
-**├── out**
-**├── PoissonDistribution.ned**         - przykładowa symulacja przy użyciu `PoissonGenerator` 
-**├── ...**                             
-**├── README.md**                       - ten plik 
-**├── results**							
-**│   ├── General-#0.vci**
-**│   └── General-#0.vec**
-**└── submodules**                      - moduły tworzone dla symulacji. Parametry ustawiamy własnie tu 
-**    ├── BasicGenerator.ned**          - moduł dla `BasicGenerator`
-**    ├── PoissonGenerator.ned**        - moduł dla `PoissonGenerator` (tu ustawiamy wartość lambda)
-**    ├── Sink.ned**                    - moduł dla `Sink`
-**    └── ...**							
+<pre>
+.
+├── generator                       - generatory Poisson/OnOff/MMP ect.
+│   ├── BasicGenerator.cpp          - klasa bazowa (parent) dla generatorów
+│   ├── BasicGenerator.h
+│   ├── PoissonGenerator.cpp        - generator Poissona: BasicGenerator
+│   ├── PoissonGenerator.h
+│   └── ... 
+├── Makefile
+├── message                          
+│   └── Message.msg                 - przesyłana wiadomość, omnet generuje Message_m.* z tego 
+├── object                         
+│   ├── Sink.cpp
+│   ├── Sink.h                      
+│   └── ...
+├── omnetpp.ini                     - konfiguracja naszych symulacji (*.ned), np. ograniczenie czasowe
+├── out
+├── PoissonDistribution.ned         - przykładowa symulacja przy użyciu `PoissonGenerator` 
+├── ...                             
+├── README.md                       - ten plik 
+├── results							
+│   ├── General-#0.vci
+│   └── General-#0.vec
+└── submodules                      - moduły tworzone dla symulacji. Parametry ustawiamy własnie tu 
+    ├── BasicGenerator.ned          - moduł dla BasicGenerator
+    ├── PoissonGenerator.ned        - moduł dla PoissonGenerator (tu ustawiamy wartość lambda)
+    ├── Sink.ned                    - moduł dla Sink
+    └── ...						
 
