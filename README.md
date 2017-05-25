@@ -9,9 +9,9 @@
 ### Uruchomienie projekt
 
 * Uruchamiamy środowisko **Omnet++**
-* Importujemy projekt (*Import -> Project from Git* lub *Import -> Existing Project from workspace*)
+* Importujemy projekt *Import -> Project from Git* lub *Import -> Existing Project from workspace*
 * Na projkecie *PPM -> Clean Project* następnie *PPM -> Build Project*
-* Wybieramy symulacje (e.g. *PoissonDistribution.ned*), kolejno *PPM -> Run As -> 1 Omnet++ Simulation*
+* Wybieramy symulacje (e.g. `PoissonDistribution.ned`), kolejno *PPM -> Run As -> 1 Omnet++ Simulation*
 
 ## Krótki dev guide
 
