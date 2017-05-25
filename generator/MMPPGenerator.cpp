@@ -9,33 +9,38 @@
 
 
 MMPPGenerator::MMPPGenerator() {
-    // TODO Auto-generated constructor stub
+
 }
 
 MMPPGenerator::~MMPPGenerator() {
-    // TODO Auto-generated destructor stub
+
 }
 
 // register module class with OMNeT++je
 Define_Module(MMPPGenerator);
 
 void MMPPGenerator::initialize() {
-    //0 -> first, ...
-    actualState = 0;
-    //counted 1,2,3...
+    actualState = STARTING_STATE;
     numberOfStates = 3;
-    //vector 4ever FCK pointer arrays!
     matrix = vector<vector<double>>(numberOfStates, vector<double>(numberOfStates));
     lambdas = vector<double>(numberOfStates);
-    generateMarkovMatrix();
+
     generateLambdas();
+    //uncomment to use static values
+    //lambdas = {0.23, 1, 3};
+
+    generateMarkovMatrix();
+    //uncomment to use static values
+    //matrix = {{0, 0.6, 0.4},{0.2, 0.4, 0.4},{0.4, 0.6, 0}};
+
     BasicGenerator::initialize();
 }
 
 void MMPPGenerator::generateLambdas(){
     //initialize generators lambdas
-    for(int i=0; i<numberOfStates; i++) {
-        lambdas[i] = uniform(0, 1);
+    for(int iterator=0; iterator<numberOfStates; iterator++) {
+        lambdas[iterator] = uniform(0, MAX_LAMBDA);
+        EV << "State " << iterator+1 << " lambda is: " << lambdas[iterator] << endl;
     }
 }
 
@@ -47,48 +52,49 @@ void MMPPGenerator::normalize(double &first, double &second, double &third){
 }
 
 void MMPPGenerator::generateMarkovMatrix(){
-    for(int i=0; i < numberOfStates; i++){
+    for(int iterator=0; iterator < numberOfStates; iterator++){
         //uniform is unifrom random in omnetpp library
         double previousPropability = uniform(0,1);
         double stayPropability = uniform(0,1);
         double nextPropability = uniform(0,1);
 
         //first cannot go back
-        if(i==0){
+        if(iterator==0){
             previousPropability = 0;
         }
         //last cannot go further
-        else if(i==numberOfStates-1){
+        else if(iterator==numberOfStates-1){
             nextPropability = 0;
         }
 
         normalize(previousPropability, stayPropability, nextPropability);
-        matrix[i][previousPropabilityIndex] = previousPropability;
-        matrix[i][stayPropabilityIndex] = stayPropability;
-        matrix[i][nextPropabilityIndex] = nextPropability;
+        matrix[iterator][PREVIOUS_PROBABILITY_INDEX] = previousPropability;
+        matrix[iterator][STAY_PROBABILITY_INDEX] = stayPropability;
+        matrix[iterator][NEXT_PROBABILITY_INDEX] = nextPropability;
     }
     printMarkovMatrix();
 }
 
 void MMPPGenerator::printMarkovMatrix(){
-    for (int i = 0; i < numberOfStates; i++){
-        for (int j = 0; j < numberOfStates; j++){
-            EV << matrix[i][j] << " ";
+    for (int rowNumber = 0; rowNumber < numberOfStates; rowNumber++){
+        EV << "[";
+        for (int columnNumber = 0; columnNumber < numberOfStates; columnNumber++){
+            EV << matrix[rowNumber][columnNumber] << " ";
         }
-        EV << "\n";
+        EV << "]\n";
     }
 }
 
 double MMPPGenerator::getGoToPreviousPropability(){
-    return matrix[actualState][previousPropabilityIndex];
+    return matrix[actualState][PREVIOUS_PROBABILITY_INDEX];
 }
 
 double MMPPGenerator::getStayPropability(){
-    return matrix[actualState][stayPropabilityIndex];
+    return matrix[actualState][STAY_PROBABILITY_INDEX];
 }
 
 double MMPPGenerator::getGoToNextPropability(){
-    return matrix[actualState][nextPropabilityIndex];
+    return matrix[actualState][NEXT_PROBABILITY_INDEX];
 }
 
 
@@ -110,8 +116,9 @@ int MMPPGenerator::chooseNextState(){
 
 double MMPPGenerator::getDelay() {
     int delay = poisson(lambdas[actualState]);
+    EV << "Actual state number is: " << actualState << "\n";
     EV << "MMPP returned: " << delay << "delay\n";
     actualState = chooseNextState();
-    EV << "Next state will be: " << actualState << "\n";
+
     return delay;
 }
