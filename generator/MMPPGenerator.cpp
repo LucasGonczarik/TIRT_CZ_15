@@ -47,9 +47,19 @@ void MMPPGenerator::normalize(double &first, double &second, double &third){
 
 void MMPPGenerator::generateMarkovMatrix(){
     for(int i=0; i < numberOfStates; i++){
+        //uniform is unifrom random in omnetpp library
         double previousPropability = uniform(0, 1);
         double stayPropability = uniform(0, 1);
         double nextPropability = uniform(0, 1);
+
+        //first cannot go back
+        if(i==0){
+            previousPropability = 0;
+        }
+        //last cannot go further
+        else if(i==numberOfStates-1){
+            nextPropability = 0;
+        }
 
         normalize(previousPropability, stayPropability, nextPropability);
 
@@ -83,7 +93,7 @@ int MMPPGenerator::getGoToPreviousPropability(){
 
 int MMPPGenerator::chooseNextState(){
     //check if cannot stay in state
-    double actionValue =((double)rand() / (double)RAND_MAX);
+    double actionValue = uniform(0, 1);
     //if cannot stay
     double stayPropability = getStayPropability();
     if(actionValue > getStayPropability()){
