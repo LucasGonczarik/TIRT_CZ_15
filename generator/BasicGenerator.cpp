@@ -22,13 +22,13 @@ BasicGenerator::~BasicGenerator() {
 void BasicGenerator::initialize() {
     eventSignal = registerSignal("event");
     // Start sending messages after 1s
-    scheduleAt(1.0, event);
+    scheduleAt(simTime() + exponential(1.0), event);
 }
 
 void BasicGenerator::handleMessage(cMessage* msg) {
     if (msg == event) {
         // Calculate delay
-        double delay = getDelay();
+        simtime_t delay = getDelay();
 
         emit(eventSignal, delay);
 
@@ -67,7 +67,7 @@ Message* BasicGenerator::generateMessage() {
     message->setSessionID(sessionId);
     message->setMessageID(messageId);
     message->setPriority(priority);
-    message->setCreationTime(simTime().dbl());
+    message->setCreationTime(simTime());
 
     return message;
 }
