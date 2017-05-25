@@ -18,7 +18,7 @@ package submodule;
 simple Sink {
     parameters:
         @class(Sink);
-    	@signal[event](type="double");
+    	@signal[event](type="simtime_t");
     	@statistic[delay](title="delay"; source="event"; record=vector,stats; interpolationmode=none);
     gates:
         input in[];
