@@ -18,14 +18,16 @@ using namespace std;
 class MMPPGenerator : public BasicGenerator{
 public:
     MMPPGenerator();
-    ~MMPPGenerator();
+    virtual ~MMPPGenerator();
 protected:
     virtual void initialize();
     virtual double getDelay();
 private:
-    const int previousPropabilityIndex = 0;
-    const int stayPropabilityIndex = 1;
-    const int nextPropabilityIndex = 2;
+    const int STARTING_STATE = 0;
+    const double MAX_LAMBDA = 1;
+    const int PREVIOUS_PROBABILITY_INDEX = 0;
+    const int STAY_PROBABILITY_INDEX = 1;
+    const int NEXT_PROBABILITY_INDEX = 2;
 
     int actualState;
     int numberOfStates;
