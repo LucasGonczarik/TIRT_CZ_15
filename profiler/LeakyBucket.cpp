@@ -7,12 +7,11 @@
 
 #include "LeakyBucket.h"
 
-Define_Module(LeakyBucket);
-
-LeakyBucket::LeakyBucket():cSimpleModule(1024)
+LeakyBucket::LeakyBucket()
 {
     last_sent = 0.0;
     rejected = 0;
+    accepted = 0;
 }
 
 LeakyBucket::~LeakyBucket()
@@ -20,19 +19,30 @@ LeakyBucket::~LeakyBucket()
 
 }
 
+Define_Module(LeakyBucket);
+
 void LeakyBucket::initialize()
 {
+    rejected = 0;
+    last_sent = 0.0;
+    accepted = 0;
     bucketSize = par("bucketSize");
-    transferSpeed = par("transferSpeed");
+    transferSpeed = par("transferSpeed").doubleValue();
+    EV << transferSpeed<<endl;
+    //transferSpeed = 1.0 / transferSpeed;
+    leakingEvent = new cMessage("leakingEvent");
+    EV << transferSpeed<<endl;
+    scheduleAt(simTime(), leakingEvent);
     //interval= par("interval");
     //signalQSize = registerSignal("qsize"); //todo
     //signalAccepted = registerSignal("accepted"); //todo
     //signalRejected = registerSignal("rejected"); //todo
 }
 
+/*
 void LeakyBucket::activity()
 {
-    /*
+
     while(true){
         EV<<"LeakyQsize: "<<queue_size<<" simTime: "<< simTime() <<" last_sent: "<< last_sent <<std::endl;
         cMessage* msg = receive();
@@ -54,12 +64,36 @@ void LeakyBucket::activity()
         queue_size = queue.size();
 
         emit(signalQSize, queue_size);
-        emit(signalAccepted, queued);
-        emit(signalRejected, rejected);
-    }*/
+    }
+}*/
+void LeakyBucket::handleMessage(cMessage* msg)
+{
+    if(msg == leakingEvent)
+    {
+        if(!queue.empty())
+        {
+            queue.erase(queue.begin());
+            accepted++;
+            EV<<"accepted!";
+        }
+
+        scheduleAt(simTime() + transferSpeed, leakingEvent);
+    }
+
+    else
+    {
+        EV<<"wyslano!";
+        if(queue.size() >= bucketSize)
+        {
+            EV<<"rejected!";
+            rejected++;
+        }
+        else
+        {
+            queue.push_back(msg);
+        }
+        delete msg;
+    }
+
 }
 
-void LeakyBucket::handleMessage(cMessage *msg)
-{
-    EV << "Got message";
-}
