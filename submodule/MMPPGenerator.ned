@@ -15,11 +15,8 @@
 
 package submodule;
 
-simple Sink {
+simple MMPPGenerator extends BasicGenerator {
     parameters:
-        @class(Sink);
-    	@signal[event](type="simtime_t");
-    	@statistic[delay](title="delay"; source="event"; record=vector,stats; interpolationmode=none);
-    gates:
-        input in[];
+        @class(MMPPGenerator);
+        double lambda = default(1.0);
 }

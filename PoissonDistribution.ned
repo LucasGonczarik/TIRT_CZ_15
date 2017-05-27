@@ -22,12 +22,11 @@ import submodule.Sink;
 network PoissonNetwork {
     submodules:
         sink: Sink {
-            @display("p=370,84");
+            @display("p=370,85");
         }
         poissonGenerator: PoissonGenerator {
-            @display("p=95,86");
+            @display("p=95,85");
         }
     connections:
         poissonGenerator.out --> sink.in++;
 }
-

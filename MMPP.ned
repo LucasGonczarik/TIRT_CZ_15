@@ -1,3 +1,7 @@
+import submodule.MMPPGenerator;
+import submodule.Sink;
+
+
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -12,14 +16,18 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
-
-package submodule;
-
-simple Sink {
-    parameters:
-        @class(Sink);
-    	@signal[event](type="simtime_t");
-    	@statistic[delay](title="delay"; source="event"; record=vector,stats; interpolationmode=none);
-    gates:
-        input in[];
+// 
+// TODO documentation
+//
+network MMPPNetwork {
+    submodules:
+        sink: Sink {
+            @display("p=370,84");
+        }
+        mmppGenerator: MMPPGenerator {
+            @display("p=95,86");
+        }
+    connections:
+        mmppGenerator.out --> sink.in++;
 }
+
