@@ -29,14 +29,14 @@ void LeakyBucket::initialize()
     bucketSize = par("bucketSize");
     transferSpeed = par("transferSpeed").doubleValue();
     EV << transferSpeed<<endl;
-    //transferSpeed = 1.0 / transferSpeed;
     leakingEvent = new cMessage("leakingEvent");
     EV << transferSpeed<<endl;
+    signalAccepted = registerSignal("accepted"); //todo
+    signalRejected = registerSignal("rejected"); //todo
+    signalQSize = registerSignal("qsize"); //todo
     scheduleAt(simTime(), leakingEvent);
+
     //interval= par("interval");
-    //signalQSize = registerSignal("qsize"); //todo
-    //signalAccepted = registerSignal("accepted"); //todo
-    //signalRejected = registerSignal("rejected"); //todo
 }
 
 /*
@@ -74,7 +74,7 @@ void LeakyBucket::handleMessage(cMessage* msg)
         {
             queue.erase(queue.begin());
             accepted++;
-            EV<<"accepted!";
+            EV<<"Przes³ano pakiet dalej! ilosc pakietów w kolejce: "<<queue.size()<<"/"<<bucketSize<<endl;
         }
 
         scheduleAt(simTime() + transferSpeed, leakingEvent);
@@ -82,18 +82,21 @@ void LeakyBucket::handleMessage(cMessage* msg)
 
     else
     {
-        EV<<"wyslano!";
         if(queue.size() >= bucketSize)
         {
-            EV<<"rejected!";
+            EV<<"odrzucono pakiet! ilosc pakietów w kolejce: "<<queue.size()<<"/"<<bucketSize<<endl;
             rejected++;
         }
         else
         {
             queue.push_back(msg);
+            EV<<"zakolejkowano, ilosc pakietów w kolejce: "<<queue.size()<<"/"<<bucketSize<<endl;
         }
         delete msg;
     }
 
+    emit(signalAccepted, accepted);
+    emit(signalRejected, rejected);
+    emit(signalQSize, (int)queue.size());
 }
 
