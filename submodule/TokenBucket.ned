@@ -19,6 +19,8 @@ simple TokenBucket {
     parameters:
         @class(TokenBucket);
     	@signal[event](type="simtime_t");
+    	double tokenGenerationInterval = default(20.0);
+    	int maxTokenCount = default(5);
     gates:
         input in;
         output out;

@@ -18,17 +18,21 @@ TokenBucket::~TokenBucket() {
 Define_Module(TokenBucket);
 
 void TokenBucket::initialize() {
+    //initialize parameters from submodule.TokenBucket.ned
+    maxTokenCount = par("maxTokenCount");
+    tokenGenerationInterval = par("tokenGenerationInterval");
+    currentTokenCount = maxTokenCount;
     //register
     tokenGenerationEventSignal = registerSignal(NEW_TOKEN_SIGNAL_TAG);
     //schedule token generation event;
-    scheduleAt(simTime() + TOKEN_GENERATION_INTERVAL, tokenGenerationEvent);
+    scheduleAt(simTime() + tokenGenerationInterval, tokenGenerationEvent);
 }
 
 void TokenBucket::handleMessage(cMessage* message) {
     //checks if event is token generation event or just a message from generator
     if (message == tokenGenerationEvent) {
         addTokenIfPossible();
-        scheduleAt(simTime() + TOKEN_GENERATION_INTERVAL, tokenGenerationEvent);
+        scheduleAt(simTime() + tokenGenerationInterval, tokenGenerationEvent);
     } else {
         //if there are tokens available send message and reduce current token count
         if (currentTokenCount > 0) {
@@ -47,7 +51,7 @@ void TokenBucket::handleMessage(cMessage* message) {
  * false -  if there was already maximum of available tokens
  */
 bool TokenBucket::addTokenIfPossible() {
-    if (currentTokenCount < MAX_TOKEN_COUNT) {
+    if (currentTokenCount < maxTokenCount) {
         currentTokenCount++;
         EV << "Token has been generated!";
         return true;
