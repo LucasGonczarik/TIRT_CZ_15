@@ -30,10 +30,11 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cpp, .msg and .sm files
 OBJS = \
+    $O/adminssioncontrol/FCFS.o \
+    $O/adminssioncontrol/RED.o \
     $O/generator/BasicGenerator.o \
     $O/generator/MMPPGenerator.o \
-    $O/generator/OnOffGenerator.o \
-    $O/generator/ParetoGenerator.o \
+ 	$O/generator/OnOffGenerator.o \
     $O/generator/PoissonGenerator.o \
     $O/object/Sink.o \
     $O/message/Message_m.o
