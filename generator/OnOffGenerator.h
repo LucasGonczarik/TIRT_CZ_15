@@ -19,9 +19,13 @@ protected:
     virtual void initialize();
     virtual double getDelay();
     virtual bool canSendMessage();
+    virtual void checkIfIsOnModeActive();
 private:
     double lambda;
     bool isOnModeActive;
+    double a;
+    double b;
+    double paretoCondition;
 };
 
 #endif /* GENERATOR_ONOFFGENERATOR_H_ */

@@ -19,6 +19,10 @@ OnOffGenerator::~OnOffGenerator() {
 Define_Module(OnOffGenerator);
 
 void OnOffGenerator::initialize() {
+    a = par("a");
+    b = par("b");
+    lambda = par("lambda");
+    paretoCondition = par("paretoCondition");
     BasicGenerator::initialize();
 }
 
@@ -27,8 +31,21 @@ double OnOffGenerator::getDelay() {
     return delay;
 }
 
+void OnOffGenerator::checkIfIsOnModeActive() {
+    //The condition can be different
+    double paretoResult = pareto_shifted(a, b, 0, 0);
+    if(paretoResult>paretoCondition){
+        isOnModeActive = false;
+    }
+    else{
+        isOnModeActive = true;
+    }
+
+}
+
 bool OnOffGenerator::canSendMessage()
 {
+    checkIfIsOnModeActive();
     // Send only in "On" state
     return BasicGenerator::canSendMessage() && isOnModeActive;
 }

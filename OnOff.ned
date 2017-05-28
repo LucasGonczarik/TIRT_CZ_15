@@ -1,3 +1,7 @@
+import submodule.OnOffGenerator;
+import submodule.Sink;
+
+
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -12,21 +16,17 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
-import submodule.OnOffGenerator;
-import submodule.Sink;
-
-
 //
 // TODO documentation
 //
-network Network
+network OnOffNetwork
 {
     submodules:
         onOffGenerator: OnOffGenerator {
-            @display("p=71,57");
+            @display("p=39,54");
         }
         sink: Sink {
-            @display("p=266,57");
+            @display("p=162,54");
         }
     connections:
         onOffGenerator.out --> sink.in++;
