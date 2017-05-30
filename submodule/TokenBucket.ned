@@ -22,8 +22,8 @@ simple TokenBucket {
      	@statistic[acceptedMessagesCount](title="Accepted messages"; source="acceptedMessagesCount"; record=vector,stats,histogram; interpolationmode=none);
      	@signal[rejectedMessagesCount](type="long");
      	@statistic[rejectedMessagesCount](title="Rejected messages"; source="rejectedMessagesCount"; record=vector,stats,histogram; interpolationmode=none);
-    	double tokenGenerationInterval = default(20.0);
-    	int maxTokenCount = default(5);
+    	double tokenGenerationInterval;
+    	int maxTokenCount;
     gates:
         input in;
         output out;

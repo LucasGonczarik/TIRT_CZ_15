@@ -1,10 +1,10 @@
-import submodule.PoissonGenerator;
+import submodule.ParetoGenerator;
 import submodule.LeakyBucket;
 
 network LeakyBucket
 {
     submodules:
-        generator: PoissonGenerator;
+        generator: ParetoGenerator;
         leakyBucket: LeakyBucket;
     connections:
         generator.out --> leakyBucket.in;
