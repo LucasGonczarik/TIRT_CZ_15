@@ -34,9 +34,12 @@ OBJS = \
     $O/adminssioncontrol/RED.o \
     $O/generator/BasicGenerator.o \
     $O/generator/MMPPGenerator.o \
- 	$O/generator/OnOffGenerator.o \
+    $O/generator/OnOffGenerator.o \
+    $O/generator/ParetoGenerator.o \
     $O/generator/PoissonGenerator.o \
     $O/object/Sink.o \
+    $O/profiler/LeakyBucket.o \
+    $O/profiler/TokenBucket.o \
     $O/message/Message_m.o
 
 # Message files

@@ -1,10 +1,3 @@
-/*
- * OnOffGenerator.cpp
- *
- *  Created on: 28.05.2017
- *      Author: Piotr
- */
-
 #include "OnOffGenerator.h"
 
 OnOffGenerator::OnOffGenerator() {
@@ -22,25 +15,36 @@ void OnOffGenerator::initialize() {
     a = par("a");
     b = par("b");
     lambda = par("lambda");
-    paretoCondition = par("paretoCondition");
+    remainingPackets = par("remainingPackets");
     BasicGenerator::initialize();
 }
 
 double OnOffGenerator::getDelay() {
-    int delay = poisson(lambda);
-    return delay;
-}
-
-void OnOffGenerator::checkIfIsOnModeActive() {
-    //The condition can be different
-    double paretoResult = pareto_shifted(a, b, 0, 0);
-    if(paretoResult>paretoCondition){
-        isOnModeActive = false;
+    if(isOnModeActive){
+        int delay = poisson(lambda);
+        return delay;
     }
     else{
         isOnModeActive = true;
+        setNextPacketsLen();
+        int delay= int(pareto_shifted(a,b,0,0));
+        return delay;
     }
+}
 
+void OnOffGenerator::setNextPacketsLen() {
+    remainingPackets = int(pareto_shifted(a,b,0,0) + 0.5);
+
+    if(remainingPackets == 0) {
+        remainingPackets = 1;
+    }
+}
+
+void OnOffGenerator::checkIfIsOnModeActive() {
+    if(remainingPackets == 0){
+        isOnModeActive = false;
+    }
+    remainingPackets--;
 }
 
 bool OnOffGenerator::canSendMessage()
