@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for TIRT
+# OMNeT++/OMNEST Makefile for TIRT_CZ_15
 #
 # This file was generated with the command:
 #  opp_makemake -f --deep -O out -I.
 #
 
 # Name of target to be created (-o option)
-TARGET = TIRT$(EXE_SUFFIX)
+TARGET = TIRT_CZ_15$(EXE_SUFFIX)
 
 # User interface (uncomment one) (-u option)
 USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(QTENV_LIBS) $(CMDENV_LIBS)
@@ -32,11 +32,15 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/adminssioncontrol/FCFS.o \
     $O/adminssioncontrol/RED.o \
+    $O/adminssioncontrol/RoundRobin.o \
     $O/generator/BasicGenerator.o \
     $O/generator/MMPPGenerator.o \
- 	$O/generator/OnOffGenerator.o \
+    $O/generator/OnOffGenerator.o \
+    $O/generator/ParetoGenerator.o \
     $O/generator/PoissonGenerator.o \
     $O/object/Sink.o \
+    $O/profiler/LeakyBucket.o \
+    $O/profiler/TokenBucket.o \
     $O/message/Message_m.o
 
 # Message files
