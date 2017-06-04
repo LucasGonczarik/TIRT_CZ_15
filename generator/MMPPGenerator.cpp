@@ -25,14 +25,40 @@ void MMPPGenerator::initialize() {
     matrix = vector<vector<double>>(numberOfStates, vector<double>(numberOfStates));
     lambdas = vector<double>(numberOfStates);
 
-    generateLambdas();
-    //uncomment to use static values
-    //lambdas = {0.23, 1, 3};
 
-    generateMarkovMatrix();
-    //uncomment to use static values
-    //matrix = {{0, 0.6, 0.4},{0.2, 0.4, 0.4},{0.4, 0.6, 0}};
+    lambdas[0] = par("lambda1");
+    lambdas[1] = par("lambda2");
+    lambdas[2] = par("lambda3");
 
+    double p01 = 0;
+    double p11 = par("p11");
+    double p12 = par("p12");
+    double p21 = par("p21");
+    double p22 = par("p22");
+    double p23 = par("p23");
+    double p32 = par("p32");
+    double p33 = par("p33");
+    double p4 = 0;
+
+    normalize(p01, p11, p12);
+    normalize(p21, p22, p23);
+    normalize(p32, p33, p4);
+
+
+    matrix[0][PREVIOUS_PROBABILITY_INDEX] = 0;
+    matrix[0][STAY_PROBABILITY_INDEX] = p11;
+    matrix[0][NEXT_PROBABILITY_INDEX] = p12;
+    matrix[1][PREVIOUS_PROBABILITY_INDEX] = p21;
+    matrix[1][STAY_PROBABILITY_INDEX] = p22;
+    matrix[1][NEXT_PROBABILITY_INDEX] = p23;
+    matrix[2][PREVIOUS_PROBABILITY_INDEX] = p32;
+    matrix[2][STAY_PROBABILITY_INDEX] = p33;
+    matrix[2][NEXT_PROBABILITY_INDEX] = 0;
+
+    //generateLambdas();
+    //generateMarkovMatrix();
+
+    printMarkovMatrix();
     BasicGenerator::initialize();
 }
 
