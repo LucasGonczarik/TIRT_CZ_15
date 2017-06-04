@@ -21,6 +21,9 @@ Define_Module(RED);
 
 void RED::initialize()
 {
+    WATCH(acceptedCount);
+    WATCH(rejectedCount);
+
     messageHandlingTime = par("messageHandlingTime");
     acceptedSignal = registerSignal("acceptedSignal");
     rejectedSignal = registerSignal("rejectedSignal");
@@ -67,4 +70,11 @@ bool RED::check(Message* message) {
     int probability = ((1 / (maxBuffer - minBuffer)) * mean - minBuffer / (maxBuffer - minBuffer)) * 100;
 
     return rand() % 101 < (100 - probability);
+}
+
+void RED::finish() {
+    EV << "---------------------------" << endl;
+    EV << "Accepted: " << acceptedCount << endl;
+    EV << "Rejected: " << rejectedCount << endl;
+    EV << "---------------------------" << endl;
 }

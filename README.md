@@ -45,7 +45,7 @@ grupy Types, kolejno do sieci wrzucamy nasze moduły z grupy `Submodules` (e.g. 
 ├── PoissonDistribution.ned         - przykładowa symulacja przy użyciu `PoissonGenerator` 
 ├── ...                             
 ├── README.md                       - ten plik 
-├── results							
+├── results							- folder z danymi, wykresami ect. tworzynymi z naszych symulacji
 │   ├── General-#0.vci
 │   └── General-#0.vec
 └── submodules                      - moduły tworzone dla symulacji. Parametry ustawiamy własnie tu 

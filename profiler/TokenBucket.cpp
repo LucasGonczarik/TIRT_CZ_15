@@ -65,3 +65,10 @@ bool TokenBucket::addTokenIfPossible() {
         return false;
     }
 }
+
+void TokenBucket::finish() {
+    EV << "---------------------------" << endl;
+    EV << "Accepted: " << acceptedMessagesCount << endl;
+    EV << "Rejected: " << rejectedMessagesCount << endl;
+    EV << "---------------------------" << endl;
+}

@@ -41,6 +41,8 @@
 ### Others ###
 /out/
 /results/
+*.anf
+
 
 # End of https://www.gitignore.io/api/git,c++
 

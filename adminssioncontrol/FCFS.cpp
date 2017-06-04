@@ -14,6 +14,9 @@ Define_Module(FCFS);
 
 void FCFS::initialize()
 {
+    WATCH(acceptedCount);
+    WATCH(rejectedCount);
+
     bufferCapacity = par("bufferCapacity");
     messageHandlingTime = par("messageHandlingTime");
     acceptedSignal = registerSignal("acceptedSignal");
@@ -46,4 +49,11 @@ void FCFS::handleMessage(cMessage* msg)
     emit(bufferSizeSignal, (long) buffer.size());
     emit(acceptedSignal, (long) acceptedCount);
     emit(rejectedSignal, (long) rejectedCount);
+}
+
+void FCFS::finish() {
+    EV << "---------------------------" << endl;
+    EV << "Accepted: " << acceptedCount << endl;
+    EV << "Rejected: " << rejectedCount << endl;
+    EV << "---------------------------" << endl;
 }

@@ -17,6 +17,7 @@ class BasicGenerator : public cSimpleModule {
     private:
         cMessage* event;
         simsignal_t eventSignal;
+        long numSent;
 
     protected:
         int sessionId;
@@ -24,6 +25,7 @@ class BasicGenerator : public cSimpleModule {
 
         virtual void initialize();
         virtual void handleMessage(cMessage* msg);
+        virtual void finish() override;
 
         virtual Message* generateMessage();
         virtual bool canSendMessage();

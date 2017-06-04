@@ -20,6 +20,10 @@ BasicGenerator::~BasicGenerator() {
 }
 
 void BasicGenerator::initialize() {
+    // Initialize variables
+    numSent = 0;
+    WATCH(numSent);
+
     eventSignal = registerSignal("event");
     // Start sending messages after 1s
     scheduleAt(simTime() + exponential(1.0), event);
@@ -34,7 +38,9 @@ void BasicGenerator::handleMessage(cMessage* msg) {
 
         if (canSendMessage()) {
             // It's time to send message, so prepare new one and send
+            bubble("SENDING new one!");
             send(generateMessage(), "out");
+            numSent++;
         }
 
         // Send next message after delay
@@ -75,4 +81,10 @@ Message* BasicGenerator::generateMessage() {
 bool BasicGenerator::canSendMessage() {
     // Return false to cancel send
     return true;
+}
+
+void BasicGenerator::finish() {
+    EV << "---------------------------" << endl;
+    EV << "Sent: " << numSent << endl;
+    EV << "---------------------------" << endl;
 }

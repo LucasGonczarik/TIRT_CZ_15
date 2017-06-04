@@ -19,6 +19,7 @@ class TokenBucket: public cSimpleModule {
     protected:
             virtual void initialize();
             virtual void handleMessage(cMessage* msg);
+            virtual void finish() override;
             virtual bool addTokenIfPossible();
     private:
         //signals tags

@@ -34,6 +34,8 @@ class RED: public cSimpleModule
 
         virtual bool check(Message* message);
         virtual void handleMessage(cMessage* msg);
+        virtual void finish() override;
+
 };
 
 #endif /* RED_H_ */

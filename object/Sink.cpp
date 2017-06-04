@@ -20,16 +20,12 @@ Sink::~Sink() {
 Define_Module(Sink);
 
 void Sink::initialize() {
+    // Initialize variables
+    numReceived = 0;
+    WATCH(numReceived);
+
     eventSignal = registerSignal("event");
     packet_count = 0;
-}
-
-void Sink::finish() {
-    char name[25];
-    for (PriorityStatsMap::iterator i = priorityStats.begin(); i != priorityStats.end(); i++) {
-        sprintf(name, "priority-%d", i->first);
-        i->second->recordAs(name);
-    }
 }
 
 void Sink::handleMessage(cMessage* msg) {
@@ -39,6 +35,10 @@ void Sink::handleMessage(cMessage* msg) {
     int priority = message->getPriority();
     cLongHistogram* stat = getHistogram(priority);
 
+    // update statistics.
+    numReceived++;
+    bubble("ARRIVED!");
+
     EV << "Send time: " << delay << endl;
     emit(eventSignal, delay);
     stat->collect(delay);
@@ -46,6 +46,18 @@ void Sink::handleMessage(cMessage* msg) {
     packet_count++;
 
     delete msg;
+}
+
+void Sink::finish() {
+    char name[25];
+    for (PriorityStatsMap::iterator i = priorityStats.begin(); i != priorityStats.end(); i++) {
+        sprintf(name, "priority-%d", i->first);
+        i->second->recordAs(name);
+    }
+
+    EV << "---------------------------" << endl;
+    EV << "Received: " << numReceived << endl;
+    EV << "---------------------------" << endl;
 }
 
 cLongHistogram* Sink::createHistogram(int priority) {

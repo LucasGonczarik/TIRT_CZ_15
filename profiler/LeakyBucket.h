@@ -21,6 +21,7 @@ class LeakyBucket : public cSimpleModule
 
         virtual void initialize();
         virtual void handleMessage(cMessage* msg);
+        virtual void finish() override;
 
     private:
         cMessage *leakingEvent;

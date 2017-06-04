@@ -28,6 +28,7 @@ class FCFS: public cSimpleModule
 
         virtual void initialize();
         virtual void handleMessage(cMessage* msg);
+        virtual void finish() override;
 };
 
 #endif /* FCFS_H_ */

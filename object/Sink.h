@@ -21,13 +21,14 @@ class Sink : public cSimpleModule {
         int packet_count;
         simsignal_t eventSignal;
         PriorityStatsMap priorityStats;
+        long numReceived;
 
         // We might need this later
         cLongHistogram* createHistogram(int priority);
         cLongHistogram* getHistogram(int priority);
     protected:
         virtual void initialize();
-        virtual void finish();
+        virtual void finish() override;
         virtual void handleMessage(cMessage* msg);
     public:
         Sink();
