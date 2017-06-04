@@ -19,4 +19,16 @@ simple MMPPGenerator extends BasicGenerator {
     parameters:
         @class(MMPPGenerator);
         double lambda = default(1.0);
+        double lambda1 = default(0.2);
+        double lambda2 = default(0.4);
+        double lambda3 = default(0.6);
+        double p11 = default(0.4);
+        double p12 = default(0.6);
+        double p21 = default(0.2);
+        double p22 = default(0.4);
+        double p23 = default(0.4);
+        double p32 = default(0.6);
+        double p33 = default(0.4);
+        
+        
 }

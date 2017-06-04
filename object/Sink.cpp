@@ -39,7 +39,7 @@ void Sink::handleMessage(cMessage* msg) {
     int priority = message->getPriority();
     cLongHistogram* stat = getHistogram(priority);
 
-    EV << "Send time: " << delay << endl;
+    //EV << "Send time: " << delay << endl;
     emit(eventSignal, delay);
     stat->collect(delay);
 

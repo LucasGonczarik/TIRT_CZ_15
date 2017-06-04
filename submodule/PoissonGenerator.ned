@@ -18,5 +18,5 @@ package submodule;
 simple PoissonGenerator extends BasicGenerator {
     parameters:
         @class(PoissonGenerator);
-        double lambda = default(5.0);
+        double lambda = default(0.1);
 }

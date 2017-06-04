@@ -25,7 +25,9 @@ private:
     bool isOnModeActive;
     double a;
     double b;
-    double paretoCondition;
+    int remainingPackets;
+    void setNextPacketsLen();
+
 };
 
 #endif /* GENERATOR_ONOFFGENERATOR_H_ */

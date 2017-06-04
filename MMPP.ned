@@ -25,6 +25,7 @@ network MMPPNetwork {
             @display("p=370,84");
         }
         mmppGenerator: MMPPGenerator {
+            p11 = 0.6;
             @display("p=95,86");
         }
     connections:
