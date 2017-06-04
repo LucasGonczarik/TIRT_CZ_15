@@ -24,32 +24,25 @@ void RoundRobin::handleMessage(cMessage* msg)
        if (!msg->isSelfMessage()) {
            Message* message = check_and_cast<Message*>(msg);
            if (buffer.size() < bufferCapacity) {
-               users[message->getSrc()].push(message);
+               unsigned int key = message->getSrc();
+               users[key].push_back(message);
+               buffer.push_back(message); //bufor sluzy jedynie jako licznik do wyswietlania w EV!.
+               if(std::find(usersOrdered2Served.begin(),usersOrdered2Served.end(),&users[key]) == usersOrdered2Served.end())
+               {
+                   usersOrdered2Served.push_back(&users[key]);
+               }
+
                ++acceptedCount;
-               buffer.push(message);
                scheduleAt(simTime() + messageHandlingTime, message);
            } else {
                ++rejectedCount;
            }
-           EV << "Source: " << message->getSrc() << std::endl;
+         //  EV << "Source: " << message->getSrc() << std::endl;
        } else {
-          unsigned int nextUser2ServeKey = getNextUserToServed();
-          std::queue<Message*> userQueue = users.find(nextUser2ServeKey)->second;
-          while(userQueue.empty())
-          {
-                unsigned int old = nextUser2ServeKey;
-                lastServed = nextUser2ServeKey;
-                nextUser2ServeKey = getNextUserToServed();
-                users.erase(old);
-                userQueue = users.find(nextUser2ServeKey)->second;
-          }
-
-          Message* sendMessage = users.find(nextUser2ServeKey)->second.front(); // buffer.push(sendMessage);
-          users.find(nextUser2ServeKey)->second.pop();
-          lastServed = nextUser2ServeKey;  //  Message* message = buffer.front();
-          buffer.pop();
-          send(sendMessage, "out"); //z jakiegos powodu wsykakuje error podczas symulacji.
-          EV << "SOURCE OUT: " << sendMessage->getSrc() << ", buffer size: " << buffer.size() << std::endl;
+          Message* sendMessage = getNextMessageToServed();
+          buffer.erase(buffer.begin());
+          send(sendMessage, "out");
+        //  EV << "SOURCE OUT: " << sendMessage->getSrc() << ", buffer size: " << buffer.size() << std::endl;
        }
    }
 
@@ -60,28 +53,83 @@ void RoundRobin::handleMessage(cMessage* msg)
     emit(rejectedSignal, (long) rejectedCount);
 }
 
-unsigned int RoundRobin::getNextUserToServed()//zastanowic sie czy dobrze, bo niestety mapa uklada sie w kolejnosci rosnacej kluczy.
+
+Message* RoundRobin::getNextMessageToServed()
 {
-    std::map<unsigned int, std::queue<Message*>>::iterator  outer = users.begin();
-    while(outer->first != lastServed && outer != users.end())
+    //showInfoAboutVariables();
+    unsigned int key = (*usersOrdered2Served.front()).front()->getSrc();
+    Message* msg = users[key].front();
+    users[key].erase(users[key].begin());
+    usersOrdered2Served.erase(usersOrdered2Served.begin()); //mozliwe gwiazdki
+    if(!users[key].empty())
     {
-        ++outer;
+        usersOrdered2Served.push_back(&users[key]); //mozliwa gwiazdka
     }
-
-    if(outer == users.end()) outer = users.begin();
-    else
-    {
-        outer++;
-        if(outer == users.end()) outer = users.begin();
-    }
-    return outer->first;
-
+   // showInfoAboutVariables();
+    return msg;
 }
 
 
 
+void RoundRobin::showVector(std::vector<Message*> vector)
+{
+    //std::cout<< "wartosc wektora to: ";
+    for(auto it = vector.begin(); it!=vector.end(); ++it )
+    {
+        std::cout<< (*it)->getSrc() << ' ';
+    }
+    std::cout<< endl;
+}
+
+void RoundRobin::showVectorOfVectors(std::vector<std::vector<Message*>*> vector)
+{
+    for(unsigned int i=0; i< vector.size();i++)
+    {
+        showVector(*vector.at(i));
+    }
+}
 
 
+void RoundRobin::showInfoAboutVariables()
+{
+    std::cout << "\t\t Adres mapy(users): " << &users <<endl;
+    std::cout << "Klucze w mapie to: ";
+    for(auto it = users.begin(); it != users.end(); ++it) {
+        std::cout << it->first << ", ";
+    }
+    std::cout<< "\nAdresy wartoœci (wektorow userów) w mapie to: ";
+    for(auto it = users.begin(); it != users.end(); ++it) {
+        std::cout << &(it->second) << ", ";
+    }
+    std::cout <<"\nZawartosc wektorow w mapie to: \n";
+    for(auto it = users.begin(); it != users.end(); ++it) {
+        std::cout << "\tDla klucza: " << it->first << ": ";
+        showVector(it->second);
+    }
+
+   std::cout << "\t\t Adres usersOrdered2Served: " << &usersOrdered2Served <<endl;
+   std::cout<< "Adresy 'wewnetrznych' wektorow: ";
+   for(auto it = usersOrdered2Served.begin(); it != usersOrdered2Served.end(); ++it) {
+       std::cout << &it <<", ";
+   }
+   std::cout <<"\nAdresy wskaznikow 'wewnetrznych' wektorow: ";
+   for(auto it = usersOrdered2Served.begin(); it != usersOrdered2Served.end(); ++it) {
+       std::cout << &(*it) << ", ";
+   }
+
+   std::cout <<"\nAdresy ITeratora 'wewnetrznych' wektorow: ";
+
+
+          for(unsigned int i=0; i< usersOrdered2Served.size();i++)
+             {
+                 std::cout << &(*usersOrdered2Served.at(i)) << ", ";
+             }
+
+
+   std::cout <<"\nZawartosc 'wewnetrznych' wektorow2: \n";
+   showVectorOfVectors(usersOrdered2Served);
+
+}
 
 
 
@@ -96,42 +144,43 @@ unsigned int RoundRobin::getNextUserToServed()//zastanowic sie czy dobrze, bo ni
  *  6. lastServed = Klucz, do kolejki z ktorej zosta³a dodana do bufora pobrana wiadomosc.
  */
 
+/*
+ * Pomys³ 2:
+ * 1. Msg zapisuj do mapy (odpowiedniej kolejki usera). <- users[message->getSrc()].push(message);
+ * 2. Jesli jeszcze tej kolejki nie ma w usersOrdered2Served to j¹ dodaj (tylko referencje!). Ta zmeinna pomoze w ustalaniu obslugi msg.
+ *
+ * Przetwarzanie msg:
+ * 3. Wez pierwsza kolejke z usersOrdered2Served do zmiennej.
+ * 4. wez  pierwszy element Msg* z pobranej kolejki do zmiennej
+ * 5. usun pobrana msg* z kolejki.
+ * 6. Jesli kolejka nie jest pusta to dodaj ja na koniec   usersOrdered2Served.
+ *  3-6 to metoda, i zwraca 4. czyli  msg* (planowana wiadomosc do oblslgi).
+ *
+ *  7.Przetworz wiadomosc;
+ *
+ * Tutaj zmienna bufor sluzy tylko za licznik!
+ */
 
 
 
-/* std::map<unsigned int, std::queue<Message*>>::iterator it= users.find(message->getSrc());
-               if(it == users.end())
-               {
-                   EV << "QUeue for source: " << message->getSrc() <<" not found!!!" << std::endl;
-                   users[message->getSrc()].push(message); //TODO pomyslec czy nie styknie tylko to
+
+
+/*
+ *   std::vector<Message*> temp;
+               std::vector<Message*> &userQ = temp;
+               if(users.find(message->getSrc()) != users.end()) {
+                   (users.find(message->getSrc())->second).push_back(message);
+                   userQ = temp;
+               } else {
+                   users.insert(std::pair<unsigned int, std::vector<Message*>>(message->getSrc(), temp));
                }
-               else
-               {
-                   it->second.push(message);
-               } */
-
-/*unsigned int nextUserKey = 0;
-   unsigned int i = 0;
-   std::queue<Message*> userQueue;
-   do
-   {
-      nextUserKey =  lastServed == users.size() - 1 ? 0 : lastServed++;
-      if(users.end()) userQueue = users.find(nextUserKey)->second;
-      i++;
-   } while(userQueue.empty() && i<users.size());
-
-   return (i-1) < users.size() ? nextUserKey : -1; //return -1, when all users queue is empty.*/
 
 
-//void RoundRobin::addMsgToUserQueue(std::map<unsigned int, std::queue<Message*>>* users, Message* message)
-//{
-   // int key = message->getSrc();
-   // users[key]->push(message);
+               //std::vector<Message*> &userQ = users[key];
+              // userQ.push_back(message);
 
-   // if(users->find(key) == users->end()){
-   //  users[key] = std::queue<Message*>;
-   // }
-   // std::queue<Message*>* userQueue = users.find(key);
-
-   // userQueue->push(&message);
-//}
+              // std::vector<Message*> refer = &(*users[key]);
+              // std::cout << "VECTOR IS: " << &users[key]<< endl;
+               //std::cout << "REF IS: " << refer << endl;
+               //userQ.push_back(message);
+*/
