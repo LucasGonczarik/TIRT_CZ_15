@@ -4,7 +4,7 @@ RED::RED()
 {
     bufferSize = 20;
     minBuffer = 3;
-    maxBuffer = 17;
+    maxBuffer = 20;
     mean = 0;
 
     messageNumber = 0;
