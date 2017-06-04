@@ -42,10 +42,10 @@ void RED::handleMessage(cMessage* msg)
             acceptedCount++;;
             buffer.push_back(message);
             scheduleAt(simTime() + messageHandlingTime, message);
-            EV << ";" <<  (int) simTime().dbl() << ";1;0; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
+            EV << ";" <<  (int) simTime().dbl() << ";accepted; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
         } else {
             rejectedCount++;
-            EV << ";" <<  (int) simTime().dbl() << ";0;1; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
+            EV << ";" <<  (int) simTime().dbl() << ";rejected; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
         }
     } else {
         Message* message = buffer.front();
