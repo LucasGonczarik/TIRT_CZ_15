@@ -5,7 +5,7 @@ RoundRobin::RoundRobin() {
     rejectedCount = 0;
 }
 
-RoundRobin::~RoundRobin() { }
+RoundRobin::~RoundRobin() {  }
 
 Define_Module(RoundRobin);
 
@@ -37,12 +37,23 @@ void RoundRobin::handleMessage(cMessage* msg)
            } else {
                ++rejectedCount;
            }
-         //  EV << "Source: " << message->getSrc() << std::endl;
+           EV << "Source IN: " << message->getSrc() << std::endl;
        } else {
-          Message* sendMessage = getNextMessageToServed();
-          buffer.erase(buffer.begin());
+           //showInfoAboutVariables();
+          unsigned int key = (*usersOrdered2Served.front()).front()->getSrc();
+          Message* sendMessage =users[key].front();
+          if(sendMessage->isScheduled()) cancelEvent(sendMessage); //OBEJSCIE BLEDU!!!!!
           send(sendMessage, "out");
-        //  EV << "SOURCE OUT: " << sendMessage->getSrc() << ", buffer size: " << buffer.size() << std::endl;
+
+
+          buffer.erase(buffer.begin());
+          users[key].erase(users[key].begin());
+          usersOrdered2Served.erase(usersOrdered2Served.begin());
+          if(!users[key].empty()){
+            usersOrdered2Served.push_back(&users[key]);
+          }
+          //showInfoAboutVariables();
+          EV << "SOURCE OUT: " << sendMessage->getSrc() << ", buffer size: " << buffer.size() << std::endl;
        }
    }
 
@@ -54,24 +65,11 @@ void RoundRobin::handleMessage(cMessage* msg)
 }
 
 
-Message* RoundRobin::getNextMessageToServed()
-{
-    //showInfoAboutVariables();
-    unsigned int key = (*usersOrdered2Served.front()).front()->getSrc();
-    Message* msg = users[key].front();
-    users[key].erase(users[key].begin());
-    usersOrdered2Served.erase(usersOrdered2Served.begin()); //mozliwe gwiazdki
-    if(!users[key].empty())
-    {
-        usersOrdered2Served.push_back(&users[key]); //mozliwa gwiazdka
-    }
-   // showInfoAboutVariables();
-    return msg;
-}
 
 
 
-void RoundRobin::showVector(std::vector<Message*> vector)
+
+/*void RoundRobin::showVector(std::vector<Message*> vector)
 {
     //std::cout<< "wartosc wektora to: ";
     for(auto it = vector.begin(); it!=vector.end(); ++it )
@@ -129,7 +127,7 @@ void RoundRobin::showInfoAboutVariables()
    std::cout <<"\nZawartosc 'wewnetrznych' wektorow2: \n";
    showVectorOfVectors(usersOrdered2Served);
 
-}
+}*/
 
 
 
@@ -160,27 +158,3 @@ void RoundRobin::showInfoAboutVariables()
  *
  * Tutaj zmienna bufor sluzy tylko za licznik!
  */
-
-
-
-
-
-/*
- *   std::vector<Message*> temp;
-               std::vector<Message*> &userQ = temp;
-               if(users.find(message->getSrc()) != users.end()) {
-                   (users.find(message->getSrc())->second).push_back(message);
-                   userQ = temp;
-               } else {
-                   users.insert(std::pair<unsigned int, std::vector<Message*>>(message->getSrc(), temp));
-               }
-
-
-               //std::vector<Message*> &userQ = users[key];
-              // userQ.push_back(message);
-
-              // std::vector<Message*> refer = &(*users[key]);
-              // std::cout << "VECTOR IS: " << &users[key]<< endl;
-               //std::cout << "REF IS: " << refer << endl;
-               //userQ.push_back(message);
-*/
