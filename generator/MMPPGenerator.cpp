@@ -58,7 +58,7 @@ void MMPPGenerator::initialize() {
     //generateLambdas();
     //generateMarkovMatrix();
 
-    printMarkovMatrix();
+    //printMarkovMatrix();
     BasicGenerator::initialize();
 }
 
@@ -142,9 +142,8 @@ int MMPPGenerator::chooseNextState(){
 
 double MMPPGenerator::getDelay() {
     int delay = poisson(lambdas[actualState]);
-    EV << "Actual state number is: " << actualState << "\n";
-    EV << "MMPP returned: " << delay << "delay\n";
+    //EV << "Actual state number is: " << actualState << "\n";
+    //EV << "MMPP returned: " << delay << "delay\n";
     actualState = chooseNextState();
-
     return delay;
 }
