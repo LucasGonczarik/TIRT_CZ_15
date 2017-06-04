@@ -23,7 +23,7 @@ simple OnOffGenerator extends BasicGenerator
         @class(OnOffGenerator);
         double lambda = default(1.0);
     	double a = default(1);
-        double b = default(0.3);
+        double b = default(2.5);
         int remainingPackets = default(1);
         bool isOnModeActive = default(true);
 }
