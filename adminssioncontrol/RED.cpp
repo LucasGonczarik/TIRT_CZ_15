@@ -33,22 +33,25 @@ void RED::handleMessage(cMessage* msg)
     messageNumber++;
     mean = (mean + buffer.size()) / 2;
 
+    if (buffer.size() == bufferSize) {
+        mean = bufferSize;
+    }
+
     if (!msg->isSelfMessage()) {
         if (this->check(message)) {
             acceptedCount++;;
             buffer.push_back(message);
             scheduleAt(simTime() + messageHandlingTime, message);
+            EV << ";" <<  (int) simTime().dbl() << ";1;0; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
         } else {
             rejectedCount++;
+            EV << ";" <<  (int) simTime().dbl() << ";0;1; " << buffer.size() << ";" << rejectedCount << ";" << acceptedCount << std::endl;
         }
     } else {
         Message* message = buffer.front();
         buffer.erase(buffer.begin());
         send(message, "out");
-        EV << buffer.size() << std::endl;
     }
-
-    EV << "BufferSize: " << buffer.size() << " Rejected: " << rejectedCount << " Accepted: " << acceptedCount << std::endl;
 
     emit(bufferSizeSignal, (long) buffer.size());
     emit(acceptedSignal, (long) acceptedCount);
