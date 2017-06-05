@@ -14,6 +14,8 @@ class LeakyBucket : public cSimpleModule
         double accepted;
         double packetLossRate;
     protected:
+        double temporaryAcceptedInterval; //Time during which how many accepted messages were sent
+        int temporaryAcceptedCount = 0;
         unsigned bucketSize;
         double transferSpeed; //packets per second
         std::vector<cMessage*> queue;
@@ -25,7 +27,9 @@ class LeakyBucket : public cSimpleModule
         virtual void finish();
 
     private:
+        cMessage* temporaryAcceptedSendEvent;
         cMessage *leakingEvent;
+        simsignal_t signalTemporaryAccepted;
         simsignal_t signalPacketLossRate;
         simsignal_t signalQSize;
         simsignal_t signalAccepted;
