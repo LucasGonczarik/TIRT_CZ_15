@@ -23,6 +23,7 @@ void TokenBucket::initialize() {
     tokenGenerationInterval = par("tokenGenerationInterval");
     currentTokenCount = maxTokenCount;
     //register signals
+    signalPacketLossRate = registerSignal(PACKET_LOSS_RATE_SIGNAL_TAG);
     tokenGenerationEventSignal = registerSignal(NEW_TOKEN_SIGNAL_TAG);
     signalAccepted = registerSignal(ACCEPTED_SIGNAL_TAG);
     signalRejected = registerSignal(REJECTED_SIGNAL_TAG);
@@ -45,10 +46,7 @@ void TokenBucket::handleMessage(cMessage* message) {
             rejectedMessagesCount++;
             EV << "No tokens! Message has been rejected!";
         }
-        emit(signalAccepted, acceptedMessagesCount);
-        emit(signalRejected, rejectedMessagesCount);
     }
-
 }
 
 /**
@@ -64,4 +62,13 @@ bool TokenBucket::addTokenIfPossible() {
     } else {
         return false;
     }
+}
+
+void TokenBucket::finish() {
+    double packetLossRate = (rejectedMessagesCount/(rejectedMessagesCount + acceptedMessagesCount)) * 100;
+    EV << "Packet loss rate: " << packetLossRate << endl;
+
+    emit(signalPacketLossRate, packetLossRate);
+    emit(signalAccepted, acceptedMessagesCount);
+    emit(signalRejected, rejectedMessagesCount);
 }

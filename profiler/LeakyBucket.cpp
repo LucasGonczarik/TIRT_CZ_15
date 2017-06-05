@@ -33,6 +33,7 @@ void LeakyBucket::initialize()
     EV << transferSpeed<<endl;
     signalAccepted = registerSignal("accepted"); //todo
     signalRejected = registerSignal("rejected"); //todo
+    signalPacketLossRate = registerSignal("packetLossRate");
     signalQSize = registerSignal("qsize"); //todo
     scheduleAt(simTime(), leakingEvent);
 
@@ -95,8 +96,16 @@ void LeakyBucket::handleMessage(cMessage* msg)
         delete msg;
     }
 
-    emit(signalAccepted, accepted);
-    emit(signalRejected, rejected);
     emit(signalQSize, (int)queue.size());
 }
+
+void LeakyBucket::finish() {
+    double packetLossRate = (rejected/(rejected + accepted)) * 100;
+    EV << "Packet loss rate: " << packetLossRate << endl;
+
+    emit(signalPacketLossRate, packetLossRate);
+    emit(signalAccepted, accepted);
+    emit(signalRejected, rejected);
+}
+
 

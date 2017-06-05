@@ -10,8 +10,9 @@ class LeakyBucket : public cSimpleModule
     public:
         LeakyBucket();
         virtual ~LeakyBucket();
-        int rejected;
-        int accepted;
+        double rejected;
+        double accepted;
+        double packetLossRate;
     protected:
         unsigned bucketSize;
         double transferSpeed; //packets per second
@@ -21,9 +22,11 @@ class LeakyBucket : public cSimpleModule
 
         virtual void initialize();
         virtual void handleMessage(cMessage* msg);
+        virtual void finish();
 
     private:
         cMessage *leakingEvent;
+        simsignal_t signalPacketLossRate;
         simsignal_t signalQSize;
         simsignal_t signalAccepted;
         simsignal_t signalRejected;

@@ -20,7 +20,7 @@ network TokenBucketNetwork
 {
     @display("bgb=606,504");
     submodules:
-        paretoGenerator: ParetoGenerator {
+        generator: ParetoGenerator {
             @display("p=103.631996,71.12");
         }
         tokenBucket: TokenBucket {
@@ -30,6 +30,6 @@ network TokenBucketNetwork
             @display("p=435.86398,71.12");
         }
     connections:
-        paretoGenerator.out --> tokenBucket.in;
+        generator.out --> tokenBucket.in;
         tokenBucket.out --> sink.in++;
 }
