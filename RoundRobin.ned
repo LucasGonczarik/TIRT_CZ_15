@@ -45,11 +45,11 @@ network RoundRobin
             @display("p=201,180");
         }
     connections:
-        mmppGenerator.out --> roundRobin.in++;
-        mmppGenerator1.out --> roundRobin.in++;
-        mmppGenerator2.out --> roundRobin.in++;
-        mmppGenerator3.out --> roundRobin.in++;
-        mmppGenerator4.out --> roundRobin.in++;
+        mmppGenerator.out++ --> roundRobin.in++;
+        mmppGenerator1.out++ --> roundRobin.in++;
+        mmppGenerator2.out++ --> roundRobin.in++;
+        mmppGenerator3.out++ --> roundRobin.in++;
+        mmppGenerator4.out++ --> roundRobin.in++;
         roundRobin.out --> sink.in++;
 }
 

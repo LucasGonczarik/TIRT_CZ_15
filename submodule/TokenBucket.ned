@@ -19,7 +19,9 @@ simple TokenBucket {
     parameters:
         @class(TokenBucket);
      	@signal[temporaryAcceptedCount](type="long");
+     	@signal[temporaryArrivedCount](type="long");
      	@statistic[temporaryAcceptedCount](title="Accepted messages during interval"; source="temporaryAcceptedCount"; record=vector,stats,histogram; interpolationmode=none);
+     	@statistic[temporaryArrivedCount](title="Arrived messages"; source="temporaryArrivedCount"; record=vector,stats,histogram; interpolationmode=none);
      	@signal[packetLossRate](type="double");
      	@statistic[packetLossRate](title="Packet loss rate"; source="packetLossRate"; record=vector,stats,histogram; interpolationmode=none);
     	double tokenGenerationInterval;

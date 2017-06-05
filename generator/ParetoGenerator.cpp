@@ -23,6 +23,6 @@ void ParetoGenerator::initialize() {
 }
 
 double ParetoGenerator::getDelay() {
-    return pareto_shifted(a, b, 0, 0);
+    return pareto_shifted(5, 5, 5, 0);
 }
 

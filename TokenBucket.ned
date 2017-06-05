@@ -30,6 +30,6 @@ network TokenBucketNetwork
             @display("p=435.86398,71.12");
         }
     connections:
-        generator.out --> tokenBucket.in;
+        generator.out++ --> tokenBucket.in;
         tokenBucket.out --> sink.in++;
 }

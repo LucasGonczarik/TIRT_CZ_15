@@ -29,9 +29,9 @@ network RED
         }
     connections:
         red.out --> sink.in++;
-        mmppGenerator1.out --> red.in++;
-        mmppGenerator2.out --> red.in++;
-        mmppGenerator3.out --> red.in++;
-        mmppGenerator4.out --> red.in++;
-        mmppGenerator5.out --> red.in++;
+        mmppGenerator1.out++ --> red.in++;
+        mmppGenerator2.out++ --> red.in++;
+        mmppGenerator3.out++ --> red.in++;
+        mmppGenerator4.out++ --> red.in++;
+        mmppGenerator5.out++ --> red.in++;
 }

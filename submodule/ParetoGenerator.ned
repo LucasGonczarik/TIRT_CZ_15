@@ -18,6 +18,6 @@ package submodule;
 simple ParetoGenerator extends BasicGenerator {
     parameters:
         @class(ParetoGenerator);
-        double a = default(1.2);
+		 double a = default(1.2);
         double b = default(0.5);
 }

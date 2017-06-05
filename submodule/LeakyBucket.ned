@@ -15,5 +15,6 @@ simple LeakyBucket
 	  	double temporaryAcceptedInterval;
 	gates:
 		input in;
+		output out;
 
 }

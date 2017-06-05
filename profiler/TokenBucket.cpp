@@ -30,6 +30,7 @@ void TokenBucket::initialize() {
     tokenGenerationEventSignal = registerSignal(NEW_TOKEN_SIGNAL_TAG);
     signalPacketLossRate = registerSignal(PACKET_LOSS_RATE_SIGNAL_TAG);
     signalTemporaryAccepted = registerSignal(TEMPORARY_ACCEPTED_SIGNAL_TAG);
+    signalTemporaryArrived = registerSignal(TEMPORARY_ARRIVED_SIGNAL_TAG);
 
     //schedule token generation event
     scheduleAt(simTime() + tokenGenerationInterval, tokenGenerationEvent);
@@ -46,9 +47,12 @@ void TokenBucket::handleMessage(cMessage* message) {
         //send statistics (how many messages were accepted in time interval)
         EV << "Accepted messages count in last interval: " << temporaryAcceptedCount << endl;
         emit(signalTemporaryAccepted, temporaryAcceptedCount);
+        emit(signalTemporaryArrived, temporaryArrivedCount);
         scheduleAt(simTime() + temporaryAcceptedInterval, temporaryAcceptedSendEvent);
         temporaryAcceptedCount = 0;
+        temporaryArrivedCount = 0;
     } else {
+        temporaryArrivedCount++;
         //if there are tokens available send message and reduce current token count
         if (currentTokenCount > 0) {
             send(message, "out");
