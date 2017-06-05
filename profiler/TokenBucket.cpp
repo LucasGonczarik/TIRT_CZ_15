@@ -9,6 +9,7 @@
 
 TokenBucket::TokenBucket() {
     tokenGenerationEvent = new cMessage(NEW_TOKEN_SIGNAL_TAG);
+    temporaryAcceptedSendEvent = new cMessage(NEW_ACCEPTED_STAT_SIGNAL_TAG);
 }
 
 TokenBucket::~TokenBucket() {
@@ -21,25 +22,37 @@ void TokenBucket::initialize() {
     //initialize parameters from submodule.TokenBucket.ned
     maxTokenCount = par("maxTokenCount");
     tokenGenerationInterval = par("tokenGenerationInterval");
+    temporaryAcceptedInterval = par("temporaryAcceptedInterval");
     currentTokenCount = maxTokenCount;
+
     //register signals
-    signalPacketLossRate = registerSignal(PACKET_LOSS_RATE_SIGNAL_TAG);
+    signalTemporaryAccepted = registerSignal(NEW_ACCEPTED_STAT_SIGNAL_TAG);
     tokenGenerationEventSignal = registerSignal(NEW_TOKEN_SIGNAL_TAG);
-    signalAccepted = registerSignal(ACCEPTED_SIGNAL_TAG);
-    signalRejected = registerSignal(REJECTED_SIGNAL_TAG);
-    //schedule token generation event;
+    signalPacketLossRate = registerSignal(PACKET_LOSS_RATE_SIGNAL_TAG);
+    signalTemporaryAccepted = registerSignal(TEMPORARY_ACCEPTED_SIGNAL_TAG);
+
+    //schedule token generation event
     scheduleAt(simTime() + tokenGenerationInterval, tokenGenerationEvent);
+    //schedule temporary accepted statistics event
+    scheduleAt(simTime() + temporaryAcceptedInterval, temporaryAcceptedSendEvent);
 }
 
 void TokenBucket::handleMessage(cMessage* message) {
-    //checks if event is token generation event or just a message from generator
+    //checks if event is token generation event, temporary accepted count statistics event or just a message from generator
     if (message == tokenGenerationEvent) {
         addTokenIfPossible();
         scheduleAt(simTime() + tokenGenerationInterval, tokenGenerationEvent);
+    } else if (message == temporaryAcceptedSendEvent) {
+        //send statistics (how many messages were accepted in time interval)
+        EV << "Accepted messages count in last interval: " << temporaryAcceptedCount << endl;
+        emit(signalTemporaryAccepted, temporaryAcceptedCount);
+        scheduleAt(simTime() + temporaryAcceptedInterval, temporaryAcceptedSendEvent);
+        temporaryAcceptedCount = 0;
     } else {
         //if there are tokens available send message and reduce current token count
         if (currentTokenCount > 0) {
             send(message, "out");
+            temporaryAcceptedCount++;
             acceptedMessagesCount++;
             currentTokenCount--;
         } else {
@@ -69,6 +82,4 @@ void TokenBucket::finish() {
     EV << "Packet loss rate: " << packetLossRate << endl;
 
     emit(signalPacketLossRate, packetLossRate);
-    emit(signalAccepted, acceptedMessagesCount);
-    emit(signalRejected, rejectedMessagesCount);
 }

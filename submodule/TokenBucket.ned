@@ -18,13 +18,12 @@ package submodule;
 simple TokenBucket {
     parameters:
         @class(TokenBucket);
-     	@signal[acceptedMessagesCount](type="double");
-     	@statistic[acceptedMessagesCount](title="Accepted messages"; source="acceptedMessagesCount"; record=vector,stats,histogram; interpolationmode=none);
-     	@signal[rejectedMessagesCount](type="double");
-     	@statistic[rejectedMessagesCount](title="Rejected messages"; source="rejectedMessagesCount"; record=vector,stats,histogram; interpolationmode=none);
+     	@signal[temporaryAcceptedCount](type="long");
+     	@statistic[temporaryAcceptedCount](title="Accepted messages during interval"; source="temporaryAcceptedCount"; record=vector,stats,histogram; interpolationmode=none);
      	@signal[packetLossRate](type="double");
      	@statistic[packetLossRate](title="Packet loss rate"; source="packetLossRate"; record=vector,stats,histogram; interpolationmode=none);
     	double tokenGenerationInterval;
+    	double temporaryAcceptedInterval;
     	int maxTokenCount;
     gates:
         input in;
