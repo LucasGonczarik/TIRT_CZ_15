@@ -29,6 +29,6 @@ network OnOffNetwork
             @display("p=162,54");
         }
     connections:
-        onOffGenerator.out --> sink.in++;
+        onOffGenerator.out++ --> sink.in++;
 }
 

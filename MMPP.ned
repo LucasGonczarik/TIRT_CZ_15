@@ -29,6 +29,6 @@ network MMPPNetwork {
             @display("p=95,86");
         }
     connections:
-        mmppGenerator.out --> sink.in++;
+        mmppGenerator.out++ --> sink.in++;
 }
 

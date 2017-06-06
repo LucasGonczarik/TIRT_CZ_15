@@ -28,5 +28,5 @@ network PoissonNetwork {
             @display("p=95,85");
         }
     connections:
-        poissonGenerator.out --> sink.in++;
+        poissonGenerator.out++ --> sink.in++;
 }

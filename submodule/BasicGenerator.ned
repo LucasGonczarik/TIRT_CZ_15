@@ -19,6 +19,6 @@ simple BasicGenerator {
     parameters:
     	@signal[event](type="simtime_t");
     	@statistic[delay](title="event delay"; source="event"; record=vector,stats; interpolationmode=none);
-    gates:
-        output out;
+    	 gates:
+        output out[];
 }

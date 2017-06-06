@@ -28,6 +28,6 @@ network ParetoNetwork {
             @display("p=95,86");
         }
     connections:
-        paretoGenerator.out --> sink.in++;
+        paretoGenerator.out++ --> sink.in++;
 }
 

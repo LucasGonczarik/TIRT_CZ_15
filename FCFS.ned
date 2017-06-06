@@ -47,10 +47,10 @@ network FCFS
             @display("p=165,142");
         }
     connections:
-        mmppGenerator.out --> fcfs.in++;
-        mmppGenerator1.out --> fcfs.in++;
-        mmppGenerator2.out --> fcfs.in++;
-        mmppGenerator3.out --> fcfs.in++;
-        mmppGenerator4.out --> fcfs.in++;
+        mmppGenerator.out++ --> fcfs.in++;
+        mmppGenerator1.out++ --> fcfs.in++;
+        mmppGenerator2.out++ --> fcfs.in++;
+        mmppGenerator3.out++ --> fcfs.in++;
+        mmppGenerator4.out++ --> fcfs.in++;
         fcfs.out --> sink.in++;
 }

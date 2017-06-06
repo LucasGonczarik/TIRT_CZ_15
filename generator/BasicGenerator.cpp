@@ -34,12 +34,17 @@ void BasicGenerator::handleMessage(cMessage* msg) {
 
         if (canSendMessage()) {
             // It's time to send message, so prepare new one and send
-            send(generateMessage(), "out");
+            int n = gateSize("out");
+
+
+            for(int i=0;i<n;i++)
+            send(generateMessage(), "out", i);
         }
 
         // Send next message after delay
         scheduleAt(simTime() + delay, event);
     }
+
     else {
         // This should never happen, but for sure delete
         delete msg;

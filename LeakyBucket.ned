@@ -7,5 +7,5 @@ network LeakyBucket
         generator: ParetoGenerator;
         leakyBucket: LeakyBucket;
     connections:
-        generator.out --> leakyBucket.in;
+        generator.out++ --> leakyBucket.in;
 }
