@@ -88,6 +88,7 @@ void LeakyBucket::handleMessage(cMessage* msg)
         //send statistics (how many messages were accepted in time interval)
         EV << "Accepted messages count in last interval: " << temporaryAcceptedCount << endl;
         emit(signalTemporaryAccepted, temporaryAcceptedCount);
+        emit(signalQSize, (int)queue.size());
         scheduleAt(simTime() + temporaryAcceptedInterval, temporaryAcceptedSendEvent);
         temporaryAcceptedCount = 0;
     }
@@ -106,7 +107,6 @@ void LeakyBucket::handleMessage(cMessage* msg)
         delete msg;
     }
 
-    emit(signalQSize, (int)queue.size());
 }
 
 void LeakyBucket::finish() {
